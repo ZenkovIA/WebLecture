@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link type="image/x-icon" href="images/favicon.png" rel="shortcut icon">
+    <title>Список дел</title>
+</head>
+<body>
+    <div class="head">
+        <div class="composite-header">
+            <h1 class="title">Список дел</h1>
+        </div>
+
+        <div class="add-task">
+            <input type="text" id="taskInput">
+            <button class="addNew" id="addTaskButton">Добавить</button>
+            <button class="cleanAll" id="cleanAllButton">Очистить все</button>
+            <select id="sortOptions">
+                <option value="newest">Самое новое</option>
+                <option value="oldest">Самое старое</option>
+                <option value="az">А-Я</option>
+                <option value="za">Я-А</option>
+            </select>
+        </div>
+        
+        <div class="filters">
+            <a href="#" class="filter-link" data-filter="all">Все</a>
+            <a href="#" class="filter-link" data-filter="completed-bg">Сделанные</a>
+            <a href="#" class="filter-link" data-filter="uncompleted">Не сделанные</a>
+        </div>
+    </div>
+
+    <div class="body">
+        <div class="task">
+            <ol id="taskList">
+            </ol>
+        </div>
+    </div>
+</body>
+<footer>
+    <hr>
+    <center>Copyright &copy;</center>
+</footer>
+</html>

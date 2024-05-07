@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Lab</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function Countdown() {
+            const [count, setCount] = React.useState(10);
+
+            React.useEffect(() => {
+                if (count > 0) {
+                    const timerId = setTimeout(() => setCount(count - 1), 1000);
+                    return () => clearTimeout(timerId);
+                }
+            }, [count]);
+
+            return <div>{count}</div>;
+        }
+
+        function Timer() {
+            const [time, setTime] = React.useState(0);
+            const [isActive, setIsActive] = React.useState(false);
+
+            React.useEffect(() => {
+                let interval = null;
+                if (isActive) {
+                    interval = setInterval(() => {
+                        setTime(prevTime => prevTime + 1);
+                    }, 1000);
+                } else if (!isActive && time !== 0) {
+                    clearInterval(interval);
+                }
+                return () => clearInterval(interval);
+            }, [isActive, time]);
+
+            return (
+                <div>
+                    <div>{time}</div>
+                    <button onClick={() => setIsActive(!isActive)}>{isActive ? '⏸' : '▶'}</button>
+                </div>
+            );
+        }
+
+        function Primes() {
+            const [primes, setPrimes] = React.useState([]);
+
+            React.useEffect(() => {
+                let n = 2;
+                const intervalId = setInterval(() => {
+                    function isPrime(num) {
+                        for (let i = 2, s = Math.sqrt(num); i <= s; i++)
+                            if (num % i === 0) return false;
+                        return num > 1;
+                    }
+
+                    while (!isPrime(n)) n++;
+                    setPrimes(primes => [...primes, n]);
+                    n++;
+                }, 1000);
+
+                return () => clearInterval(intervalId);
+            }, []);
+
+            return <div>{primes.join(", ")}</div>;
+        }
+
+        function TrafficLight() {
+            const [color, setColor] = React.useState('red');
+
+            React.useEffect(() => {
+                const colors = ['red', 'yellow', 'green'];
+                let current = 0;
+
+                const intervalId = setInterval(() => {
+                    current = (current + 1) % colors.length;
+                    setColor(colors[current]);
+                }, 1000); // Change light every second
+
+                return () => clearInterval(intervalId);
+            }, []);
+
+            return (
+                <div style={{ width: '50px', height: '150px', backgroundColor: color }}>
+                </div>
+            );
+        }
+
+        function Revert({ s }) {
+            const [text, setText] = React.useState(s);
+
+            React.useEffect(() => {
+                const intervalId = setInterval(() => {
+                    setText(text => text[text.length - 1] + text.substring(0, text.length - 1));
+                }, 1000);
+
+                return () => clearInterval(intervalId);
+            }, []);
+
+            return <div>{text}</div>;
+        }
+
+        function App() {
+            return (
+                <>
+                    <h2>Задача 1: Обратный таймер</h2>
+                    <Countdown />
+
+                    <h2>Задача 2: Восходящий таймер</h2>
+                    <Timer />
+
+                    <h2>Задача 3: Вывод простых чисел</h2>
+                    <Primes />
+
+                    <h2>Задача 4: Светофор</h2>
+                    <TrafficLight />
+
+                    <h2>Задача 5: Переставлять символы строки</h2>
+                    <Revert s="привет!" />
+                </>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

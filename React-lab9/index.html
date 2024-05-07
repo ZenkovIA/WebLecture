@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function CitySelect() {
+            const [city, setCity] = React.useState('');
+
+            return (
+                <div>
+                    <select value={city} onChange={e => setCity(e.target.value)}>
+                        <option value="rio">Рио-де-Жанейро</option>
+                        <option value="moscow">Москва</option>
+                        <option value="new-york">Нью-Йорк</option>
+                    </select>
+                    {city !== 'rio' && city && <p>Нет, это не Рио-де-Жанейро!</p>}
+                </div>
+            );
+        }
+
+        function Calculator() {
+            const [num1, setNum1] = React.useState(0);
+            const [num2, setNum2] = React.useState(0);
+            const [operation, setOperation] = React.useState('+');
+            const [result, setResult] = React.useState(0);
+
+            const calculate = () => {
+                switch (operation) {
+                    case '+': setResult(num1 + num2); break;
+                    case '-': setResult(num1 - num2); break;
+                    case '*': setResult(num1 * num2); break;
+                    case '/': setResult(num1 / num2); break;
+                    default: setResult(0);
+                }
+            };
+
+            return (
+                <div>
+                    <input type="number" value={num1} onChange={e => setNum1(+e.target.value)} />
+                    <select value={operation} onChange={e => setOperation(e.target.value)}>
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="*">*</option>
+                        <option value="/">/</option>
+                    </select>
+                    <input type="number" value={num2} onChange={e => setNum2(+e.target.value)} />
+                    <button onClick={calculate}>Calculate</button>
+                    <p>{`${num1} ${operation} ${num2} = ${result}`}</p>
+                </div>
+            );
+        }
+
+        function NumberSystemCalculator() {
+            const [input, setInput] = React.useState('');
+            const [base, setBase] = React.useState(10);
+            const [output, setOutput] = React.useState('');
+
+            const convertNumber = () => {
+                try {
+                    const number = parseInt(input, base);
+                    setOutput(number.toString(10));
+                } catch (error) {
+                    setOutput('Invalid input');
+                }
+            };
+
+            return (
+                <div>
+                    <input value={input} onChange={e => setInput(e.target.value)} />
+                    <select value={base} onChange={e => setBase(e.target.value)}>
+                        <option value="2">Binary</option>
+                        <option value="10">Decimal</option>
+                        <option value="16">Hexadecimal</option>
+                    </select>
+                    <button onClick={convertNumber}>Convert</button>
+                    <p>Result: {output}</p>
+                </div>
+            );
+        }
+
+        function AgeInSeconds() {
+            const [birthday, setBirthday] = React.useState('');
+            const [seconds, setSeconds] = React.useState(0);
+
+            React.useEffect(() => {
+                if (birthday) {
+                    const birthDate = new Date(birthday);
+                    const updateSeconds = () => {
+                        const now = new Date();
+                        const diff = (now.getTime() - birthDate.getTime()) / 1000;
+                        setSeconds(Math.floor(diff));
+                    };
+                    updateSeconds();
+                    const intervalId = setInterval(updateSeconds, 1000);
+                    return () => clearInterval(intervalId);
+                }
+            }, [birthday]);
+
+            return (
+                <div>
+                    <input
+                        type="date"
+                        value={birthday}
+                        onChange={e => setBirthday(e.target.value)}
+                    />
+                    <p>Вы прожили: {seconds} секунд.</p>
+                </div>
+            );
+        }
+
+        function NumberFilter() {
+            const [numbers, setNumbers] = React.useState([]);
+            const [newNumber, setNewNumber] = React.useState('');
+            const [filter, setFilter] = React.useState('all');
+
+            const addNumber = () => {
+                if (newNumber) {
+                    setNumbers([...numbers, parseInt(newNumber)]);
+                    setNewNumber('');
+                }
+            };
+
+            const filteredNumbers = numbers.filter(num => {
+                if (filter === 'even') {
+                    return num % 2 === 0;
+                } else if (filter === 'odd') {
+                    return num % 2 !== 0;
+                }
+                return true;
+            });
+
+            return (
+                <div>
+                    <input
+                        type="number"
+                        value={newNumber}
+                        onChange={e => setNewNumber(e.target.value)}
+                    />
+                    <button onClick={addNumber}>+</button>
+                    <select value={filter} onChange={e => setFilter(e.target.value)}>
+                        <option value="all">All</option>
+                        <option value="even">Even</option>
+                        <option value="odd">Odd</option>
+                    </select>
+                    <ul>
+                        {filteredNumbers.map((num, index) => (
+                            <li key={index}>{num}</li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <>
+                <h2>Селектор городов</h2>
+                <CitySelect />
+
+                <h2>Калькулятор</h2>
+                <Calculator />
+
+                <h2>Калькулятор систем счисления</h2>
+                <NumberSystemCalculator />
+
+                <h2>Прожитые секунды</h2>
+                <AgeInSeconds />
+
+                <h2>Список чисел с фильтрацией</h2>
+                <NumberFilter />
+            </>,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>

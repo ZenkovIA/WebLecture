@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        function Square({ n }) {
+            return <div>{n * n}</div>;
+        }
+
+        function OnlyEven({ arr }) {
+            return <div>{arr.filter(num => num % 2 === 0).join(", ")}</div>;
+        }
+
+        function Temperature({ t }) {
+            const style = { color: t < 0 ? 'blue' : 'red' };
+            return <div style={style}>{t}</div>;
+        }
+
+        function ChangeColor() {
+            const [color, setColor] = React.useState('red');
+            const toggleColor = () => setColor(prevColor => prevColor === 'red' ? 'green' : 'red');
+            return <button onClick={toggleColor} style={{ backgroundColor: color }}>Смена цвета</button>;
+        }
+
+        function App() {
+            return (
+                <>
+                    <Square n={3} />
+                    <OnlyEven arr={[14, 5, 6, 12, 21, 2]} />
+                    <Temperature t={451} />
+                    <ChangeColor />
+                </>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>

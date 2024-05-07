@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function RegistrationForm() {
+            const [login, setLogin] = React.useState('');
+            const [password, setPassword] = React.useState('');
+            const [confirmPassword, setConfirmPassword] = React.useState('');
+            const [errors, setErrors] = React.useState({});
+
+            const Submit = (event) => {
+                event.preventDefault();
+                if (validateForm()) {
+                    alert('Форма успешно отправлена');
+                }
+            };
+
+            const validateForm = () => {
+                let isValid = true;
+                const newErrors = {};
+
+                if (password !== confirmPassword) {
+                    newErrors.confirmPassword = 'Пароли не совпадают';
+                    isValid = false;
+                }
+
+                setErrors(newErrors);
+                return isValid;
+            };
+
+            return (
+                <form onSubmit={Submit}>
+                    <div>
+                        <label htmlFor="login">Логин:</label>
+                        <input type="text" id="login" name="login" required minLength="6" maxLength="20" pattern="[a-zA-Z0-9]+" value={login} onChange={(e) => setLogin(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Пароль:</label>
+                        <input type="password" id="password" name="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="confirmPassword">Подтверждение пароля:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                        {errors.confirmPassword && <div style={{color: 'red'}}>{errors.confirmPassword}</div>}
+                    </div>
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+            );
+        }
+
+        function ProfileForm() {
+            const Submit = (event) => {
+                event.preventDefault();
+                alert('Форма отправлена');
+            };
+
+            return (
+                <form onSubmit={Submit}>
+                    <div>
+                        <label htmlFor="firstName">Имя:</label>
+                        <input type="text" id="firstName" name="firstName" required />
+                    </div>
+                    <div>
+                        <label htmlFor="middleName">Отчество:</label>
+                        <input type="text" id="middleName" name="middleName" required />
+                    </div>
+                    <div>
+                        <label htmlFor="lastName">Фамилия:</label>
+                        <input type="text" id="lastName" name="lastName" required />
+                    </div>
+                    <div>
+                        <label htmlFor="birthdate">Дата рождения:</label>
+                        <input type="date" id="birthdate" name="birthdate" />
+                    </div>
+                    <div>
+                        <label htmlFor="address">Адрес:</label>
+                        <input type="text" id="address" name="address" />
+                    </div>
+                    <button type="submit">Сохранить изменения</button>
+                </form>
+            );
+        }
+
+        ReactDOM.render(
+            <>
+                <h2>Форма регистрации</h2>
+                <RegistrationForm />
+
+                <h2>Форма редактирования профиля</h2>
+                <ProfileForm />
+            </>,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>

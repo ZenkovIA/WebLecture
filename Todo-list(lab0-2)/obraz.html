@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Список дел</title>
+        <link rel="shortcut icon" href="favin.png" type="image/png">
+        <link rel = "stylesheet" href="style.css">
+    </head>
+    <div id="myDIV" class="header">
+        <h1 text-align="center">Список дел</h1>
+        <input type="text" id="inputdl" placeholder="Введите новое дело..."><span onclick="newElement()" class="addBtn">Добавить</span><span onclick="newElement1()"class="deleteBtn">Очистить всё</span>
+    </div>
+    <body>     
+        <ol id="myOL">
+            <li class="checked">Захватить северную корею</li>
+            <li>Сбросить атомку на Средиземное море</li>
+            <li>Сразиться с Посейдоном за сокровища Атлантиды</li>
+        </ol>
+        <hr>
+        <h2 text-align="center">Copyright©</h2>
+        <script>
+        var myNodelist = document.getElementsByTagName("LI");
+        var i;
+        for (i = 0; i < myNodelist.length; i++) {
+            var span = document.createElement("SPAN");
+            var txt = document.createTextNode("\u00D7");
+            span.className = "close";
+            span.appendChild(txt);
+            myNodelist[i].appendChild(span);
+        }
+
+        // Нажмите на кнопку закрыть, чтобы скрыть текущий элемент списка
+        var close = document.getElementsByClassName("close");
+        var i;
+        for (i = 0; i < close.length; i++) {
+            close[i].onclick = function () {
+                var div = this.parentElement;
+                div.style.display = "none";
+            }
+        }
+
+        // Добавление символа "проверено" при нажатии на элемент списка
+        var list = document.querySelector('ol');
+        list.addEventListener('click', function (ev) {
+            if (ev.target.tagName === 'LI') {
+                ev.target.classList.toggle('checked');
+            }
+        }, false);
+
+        // Создайте новый элемент списка при нажатии на кнопку "Добавить"
+        function newElement() {
+            var li = document.createElement("li");
+            var inputValue = document.getElementById("inputdl").value;
+            var t = document.createTextNode(inputValue);
+            li.appendChild(t);
+            if (inputValue === '') {
+                alert("Вы должны что-то написать!");
+            } else {
+                document.getElementById("myOL").appendChild(li);
+            }
+            document.getElementById("inputdl").value = "";
+
+            var span = document.createElement("SPAN");
+            var txt = document.createTextNode("\u00D7");
+            span.className = "close";
+            span.appendChild(txt);
+            li.appendChild(span);
+
+            for (i = 0; i < close.length; i++) {
+                close[i].onclick = function () {
+                    var div = this.parentElement;
+                    div.style.display = "none";
+                }
+            }
+        }
+
+        // Функция для очистки всех задач
+        function newElement1() {
+            var list = document.getElementById("myOL");
+            while (list.firstChild) {
+                list.removeChild(list.firstChild);
+            }
+        }
+            </script>
+    </body>
+</html>
